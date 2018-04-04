@@ -3,6 +3,7 @@ type Query {
     users: [User!]!
     user(id: ID!): User
     conversation(id: ID!): Conversation
+    organization(id: ID!): Organization
     description: String
 }
 
@@ -12,6 +13,9 @@ type Mutation {
     login(email: String!, password: String!): User
     createConversation(admin: ID!): Conversation
     createMessage(conversation: ID!, sender: ID!, text: String!): Message
+    createOrganization(creator: ID!, name: String!, logo: String): Organization
+    createRole(organization: ID!, name: String!): Role
+    addMember(organization: ID!, user: ID!, role: ID!): Member
 }
 
 # Define subscriptions
@@ -31,7 +35,7 @@ type User {
     password: String!
     avatar: String
     conversations: [Conversation!]
-    # organizations: [Organization!]! # We'll use it later
+    organizations: [Organization!]
     # geolocation: {  # We'll use it later
     #     current: Geolocation  # We'll use it later
     #     record: [Geolocation!]! # We'll use it later
@@ -55,4 +59,36 @@ type Message {
     conversation: Conversation!
     sender: User!
     text: String!
+}
+
+type Organization {
+    id: ID!
+    createdAt: String!
+    updatedAt: String!
+    name: String!
+    description: String
+    logo: String
+    roles: [Role!]
+    members: [Member!]
+    # clients: [Organization]! We'll use it later
+    # abilities: [Abilities]! We'll use it later
+}
+
+type Role {
+    id: ID!
+    createdAt: String!
+    updatedAt: String!
+    organization: Organization!
+    name: String!
+    # permissions: [String]
+}
+
+type Member {
+    id: ID!
+    createdAt: String!
+    updatedAt: String!
+    organization: Organization!
+    user: User!
+    role: Role!
+    # abilities: [MemberAbility] We'll use it later
 }

@@ -1,4 +1,12 @@
-const { User, Conversation, ConversationMember, Message } = require('./connectors');
+const { 
+    User, 
+    Conversation, 
+    ConversationMember, 
+    Message, 
+    Organization, 
+    Role, 
+    Member 
+} = require('./connectors');
 
 const resolvers = {
     Query: {
@@ -11,6 +19,9 @@ const resolvers = {
         },
         conversation: (parent, args) => {
             return Conversation.findById(args.id);
+        },
+        organization: (parent, args) => {
+            return Organization.findById(args.id);
         },
     },
     Mutation: {
@@ -35,6 +46,45 @@ const resolvers = {
                 return message;
             })
         },
+        createOrganization: async (parent, args, { pubsub }) => {
+            const organization = new Organization({ name: args.name, logo: args.logo });
+            const role = new Role({ organization: organization._id, name: 'owner' });
+            const member = new Member({ organization: organization._id, user: args.creator, role: role._id });
+            if(organization.validate() && role.validate() && member.validate()) {
+                await organization.save()
+                await role.save()
+                await member.save()
+                return organization
+                // return organization.save()
+                //     .then(() => {
+                //         return role.save()
+                //         .then(() => {
+                //             return member.save();
+                //         })
+                //     })
+            }
+            // return new Organization(args).save()
+            //     .then(organization => {
+            //         const ownerRole = new Role({
+            //             organization: organization._id,
+            //             name: 'owner'
+            //         });
+            //     ownerRole.save().then(role => {
+            //         ownerMember = new Member({
+            //             organization: organization._id,
+            //             role: role._id,
+            //             user: args.user
+            //         })
+            //         return ownerRole.save();
+            //     })
+            // })
+        },
+        createRole: async (parent, args, { pubsub }) => {
+            return new Role(args).save()
+        },
+        addMember: async (parent, args, { pubsub }) => {
+            return new Member(args).save()
+        }
     },
     Subscription: {
         logins: {
@@ -74,6 +124,30 @@ const resolvers = {
             return Conversation.findById(parent.conversation)
         }
     },
+    Organization: {
+        roles: (parent) => {
+            return Role.find({ organization: parent.id })
+        },
+        members: (parent) => {
+            return Member.find({ organization: parent.id })
+        }
+    },
+    Role: {
+        organization: (parent) => {
+            return Organization.findById(parent.organization)
+        }
+    },
+    Member: {
+        organization: (parent) => {
+            return Organization.findById(parent.organization)
+        },
+        user: (parent) => {
+            return User.findById(parent.user)
+        },
+        role: (parent) => {
+            return Role.findById(parent.role)
+        }
+    }
 }
 
 module.exports = resolvers;
