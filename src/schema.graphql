@@ -1,0 +1,54 @@
+# Define available queries
+type Query {
+    users: [User!]!
+    user(id: ID!): User
+    description: String
+}
+
+# Define available mutations (aka Create, Update, Delete)
+type Mutation {
+    signup(email: String!, password: String!): User
+    login(email: String!, password: String!): User
+}
+
+# Define subscriptions
+type Subscription {
+    logins: User!
+}
+
+type User {
+    id: ID!
+    createdAt: String!
+    updatedAt: String!
+    dni: String
+    firstname: String
+    lastname: String
+    email: String!
+    password: String!
+    avatar: String
+    conversations: [Conversation!]
+    # organizations: [Organization!]! # We'll use it later
+    # geolocation: {  # We'll use it later
+    #     current: Geolocation  # We'll use it later
+    #     record: [Geolocation!]! # We'll use it later
+    # }
+}
+
+type Conversation {
+    id: ID!
+    createdAt: String!
+    updatedAt: String!
+    admin: User!
+    members: [User!]
+    messages: [Message!]
+    # events: [ConversationEvents]!
+}
+
+type Message {
+    id: ID!
+    createdAt: String!
+    updatedAt: String!
+    conversation: Conversation!
+    sender: User!
+    text: String!
+}

@@ -1,19 +1,11 @@
-const { GraphQLServer } = require('graphql-yoga');
+const { GraphQLServer, PubSub } = require('graphql-yoga');
+const resolvers = require('./resolvers');
 
-const typeDefs =`
-type Query {
-    description: String
-}
-`
-const resolvers = {
-    Query: {
-        description: () => `This is the API for the project application`
-    }
-}
-
+const pubsub = new PubSub()
 const server = new GraphQLServer({
-    typeDefs,
-    resolvers
+    typeDefs: './src/schema.graphql',
+    resolvers,
+    context: { pubsub }
 })
 
 server.start(() => console.log(`The server is running on http://localhost:4000`))
