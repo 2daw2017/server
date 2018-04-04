@@ -9,7 +9,7 @@ const MessageSchema = Mongoose.Schema({
         type: Mongoose.SchemaTypes.ObjectId,
         required: true,
     },
-    user: {
+    sender: {
         type: Mongoose.SchemaTypes.ObjectId,
         required: true,
     },

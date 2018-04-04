@@ -9,6 +9,10 @@ const ConversationSchema = Mongoose.Schema({
         type: Mongoose.SchemaTypes.ObjectId,
         required: true
     },
+    members: [{
+        type: Mongoose.SchemaTypes.ObjectId,
+        required: true
+    }],
 }, { timestamps: true });
 
 module.exports = Mongoose.model('Conversation', ConversationSchema);

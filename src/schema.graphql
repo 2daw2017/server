@@ -2,6 +2,7 @@
 type Query {
     users: [User!]!
     user(id: ID!): User
+    conversation(id: ID!): Conversation
     description: String
 }
 
@@ -9,11 +10,14 @@ type Query {
 type Mutation {
     signup(email: String!, password: String!): User
     login(email: String!, password: String!): User
+    createConversation(admin: ID!): Conversation
+    createMessage(conversation: ID!, sender: ID!, text: String!): Message
 }
 
 # Define subscriptions
 type Subscription {
     logins: User!
+    conversation(id: ID!): Message!
 }
 
 type User {
