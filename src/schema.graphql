@@ -71,7 +71,7 @@ type Organization {
     roles: [Role!]
     members: [Member!]
     # clients: [Organization]! We'll use it later
-    # abilities: [Abilities]! We'll use it later
+    # abilities: [Ability]! We'll use it later
 }
 
 type Role {
@@ -90,5 +90,5 @@ type Member {
     organization: Organization!
     user: User!
     role: Role!
-    # abilities: [MemberAbility] We'll use it later
+    # abilities: [Ability] We'll use it later
 }
