@@ -12,6 +12,11 @@ const resolvers = {
         conversation: (parent, args) => {
             return Conversation.findById(args.id);
         },
+        conversations: (parent, args) => {
+            return Conversation.find({
+                members: args.userId
+            })
+        },
     },
     Mutation: {
         signup: (parent, args) => {

@@ -3,7 +3,8 @@ type Query {
     users: [User!]!
     user(id: ID!): User
     conversation(id: ID!): Conversation
-    description: String
+    description: String,
+    conversations(id: ID!): [Conversation],
 }
 
 # Define available mutations (aka Create, Update, Delete)
