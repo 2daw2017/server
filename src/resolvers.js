@@ -23,6 +23,11 @@ const resolvers = {
         organization: (parent, args) => {
             return Organization.findById(args.id);
         },
+        conversations: (parent, args) => {
+            return Conversation.find({
+                members: args.userId
+            })
+        },
     },
     Mutation: {
         signup: (parent, args) => {

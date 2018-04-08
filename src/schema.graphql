@@ -5,6 +5,7 @@ type Query {
     conversation(id: ID!): Conversation
     organization(id: ID!): Organization
     description: String
+    conversations(id: ID!): [Conversation]
 }
 
 # Define available mutations (aka Create, Update, Delete)
